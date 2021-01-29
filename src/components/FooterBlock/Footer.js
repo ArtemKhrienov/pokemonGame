@@ -1,24 +1,14 @@
-import { string } from 'prop-types';
-
 import s from './Footer.module.css';
 
-const Footer = ({
-    title = 'THANKS FOR VISITING',
-    copyright = '© 2021 #ReactMarathon.'
-  }) => {
+const Footer = () => {
   return (
     <footer>
       <div className={s.wrapper}>
-        <h3>{ title }</h3>
-        <p>{ copyright }</p>
+        <h3>THANKS FOR VISITING</h3>
+        <p>© 2021 #ReactMarathon.</p>
       </div>
     </footer>
   );
-};
-
-Footer.propTypes = {
-  title: string,
-  copyright: string
 };
 
 export default Footer;

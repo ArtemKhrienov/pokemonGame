@@ -2,10 +2,7 @@ import { string } from 'prop-types';
 
 import s from './Header.module.css';
 
-const Header = ({
-    title = 'This is title',
-    descr = 'This is Description!'
-  }) => {
+const Header = ({ title, descr }) => {
   return (
     <header className={s.root}>
       <div className={s.forest}></div>
@@ -18,8 +15,8 @@ const Header = ({
 };
 
 Header.propTypes = {
-  title: string,
-  descr: string
+  title: string.isRequired,
+  descr: string.isRequired
 };
 
 export default Header;

@@ -1,3 +1,5 @@
+import { randomInt } from '../shared/helpers';
+
 import FirstSectionBg from '../assets/img/bg.jpg';
 import LastSectionBg from '../assets/img/bg2.jpg';
 
@@ -8,10 +10,10 @@ import Footer from './FooterBlock/Footer';
 function App() {
   return (
     <>
-      <Header />
-      <Layout urlBg={FirstSectionBg} />
-      <Layout colorBg="#fafafa00" />
-      <Layout urlBg={LastSectionBg} />
+      <Header title="This is title" descr="This is Description!"/>
+      <Layout id={randomInt()} title="Section title" descr="Section description!" urlBg={FirstSectionBg} />
+      <Layout id={randomInt()} title="Section title" descr="Section description!" colorBg="#fafafa00" />
+      <Layout id={randomInt()} title="Section title" descr="Section description!" urlBg={LastSectionBg} />
       <Footer />
     </>
   );

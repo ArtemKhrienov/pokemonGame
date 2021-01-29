@@ -1,16 +1,8 @@
 import { string, number } from 'prop-types';
-
-import { randomInt } from '../../shared/helpers';
 import s from './Layout.module.css';
 
-const Layout = ({
-    id = randomInt(),
-    title = `Section ${id} title`,
-    descr = `Section ${id} description!`,
-    urlBg,
-    colorBg
-  }) => {
-  let sectionStyle = {};
+const Layout = ({ id, title, descr, urlBg, colorBg }) => {
+  const sectionStyle = {};
 
   if (urlBg) sectionStyle.backgroundImage = `url(${urlBg})`;
   if (colorBg) sectionStyle.backgroundColor = colorBg;
@@ -33,9 +25,9 @@ const Layout = ({
 };
 
 Layout.propTypes = {
-  id: number,
-  title: string,
-  descr: string,
+  id: number.isRequired,
+  title: string.isRequired,
+  descr: string.isRequired,
   urlBg: string,
   colorBg: string
 };
