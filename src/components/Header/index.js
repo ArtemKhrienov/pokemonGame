@@ -1,6 +1,6 @@
 import { string } from 'prop-types';
 
-import s from './Header.module.css';
+import s from './style.module.css';
 
 const Header = ({ title, descr }) => {
   return (

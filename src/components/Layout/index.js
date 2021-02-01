@@ -1,7 +1,7 @@
-import { string, number } from 'prop-types';
-import s from './Layout.module.css';
+import { string, node } from 'prop-types';
+import s from './style.module.css';
 
-const Layout = ({ id, title, descr, urlBg, colorBg }) => {
+const Layout = ({ id, title, urlBg, colorBg, children }) => {
   const sectionStyle = {};
 
   if (urlBg) sectionStyle.backgroundImage = `url(${urlBg})`;
@@ -16,7 +16,7 @@ const Layout = ({ id, title, descr, urlBg, colorBg }) => {
             <span className={s.separator}></span>
           </div>
           <div className={`${s.desc} ${s.full}`}>
-            <p>{ descr }</p>
+            {children}
           </div>
         </article>
       </div>
@@ -25,11 +25,11 @@ const Layout = ({ id, title, descr, urlBg, colorBg }) => {
 };
 
 Layout.propTypes = {
-  id: number.isRequired,
+  id: string.isRequired,
   title: string.isRequired,
-  descr: string.isRequired,
+  children: node.isRequired,
   urlBg: string,
-  colorBg: string
+  colorBg: string,
 };
 
 export default Layout;
