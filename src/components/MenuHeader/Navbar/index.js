@@ -1,30 +1,42 @@
-import { bool, func } from 'prop-types';
+import { bool, func, array } from 'prop-types';
 import cn from 'classnames';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import s from './style.module.css';
 
-const NavBar = ({ active, onCloseMenu }) => {
+const NavBar = ({ active, onCloseMenu, bgActive, homePaths }) => {
+  const history = useHistory();
+  const { pathname } = useLocation();
+
+  const handleLogoClick = () => {
+    if (!homePaths.includes(pathname)) {
+      if (active) onCloseMenu && onCloseMenu();
+      history.push('/');
+    }
+  };
+  
   return(
-    <nav id={s.navbar}>
+    <nav id={s.navbar} className={cn({ [s.bgActive]: bgActive })}>
       <div className={s.navWrapper}>
-        <p className={s.brand}>
+        <p className={s.brand} onClick={handleLogoClick}>
           LOGO
         </p>
-        <a
-          href="#welcome"
-          className={cn(s.menuButton, { [s.active]: active, [s.deactive]: !active })}
+        <div
+          className={cn(s.menuButton, { [s.active]: active })}
           onClick={onCloseMenu}
         >
           <span />
-        </a>
+        </div>
       </div>
     </nav>
   );
 };
 
 NavBar.propTypes = {
-  active: bool.isRequired,
-  onCloseMenu: func.isRequired
+  homePaths: array.isRequired,
+  onCloseMenu: func.isRequired,
+  active: bool,
+  bgActive: bool
 };
 
 export default NavBar;
