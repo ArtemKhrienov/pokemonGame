@@ -1,4 +1,4 @@
-import { string, number, object, bool, func } from 'prop-types';
+import { string, number, object, bool, func, oneOfType } from 'prop-types';
 import cn from 'classnames';
 
 import cardBackSideBg from './assets/card-back-side.jpg';
@@ -43,7 +43,7 @@ const PokemonCard = ({ id, name, type, values, img, isActive, onCardClick }) => 
 };
 
 PokemonCard.propTypes = {
-  id: number.isRequired,
+  id: oneOfType([number, string]).isRequired,
   name: string.isRequired,
   type: string.isRequired,
   values: object.isRequired,
