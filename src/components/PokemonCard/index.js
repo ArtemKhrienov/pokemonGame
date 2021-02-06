@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import { string, number, object } from 'prop-types';
+import { string, number, object, bool, func } from 'prop-types';
 import cn from 'classnames';
 
 import cardBackSideBg from './assets/card-back-side.jpg';
 import s from './style.module.css';
 
-const PokemonCard = ({ id, name, type, values, img }) => {
-  const [isActive, setActive] = useState(false);
-
+const PokemonCard = ({ id, name, type, values, img, isActive, onCardClick }) => {
   const handleClick = () => {
-    setActive(!isActive);
+    onCardClick && onCardClick(id);
   };
 
   return(
@@ -50,7 +47,9 @@ PokemonCard.propTypes = {
   name: string.isRequired,
   type: string.isRequired,
   values: object.isRequired,
-  img: string.isRequired
+  img: string.isRequired,
+  isActive: bool.isRequired,
+  onCardClick: func.isRequired
 };
 
 export default PokemonCard;

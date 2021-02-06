@@ -1,34 +1,26 @@
+import MENU from '../../../shared/data/menu.json';
+
 import { bool, func } from 'prop-types';
+import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import s from './style.module.css';
 
 const Menu = ({ active, onClickMenuItem }) => {
   return(
-    <div className={cn(s.menuContainer, {[s.active]: active, [s.deactive]: !active})}>
+    <div className={cn(s.menuContainer, {[s.active]: active === true, [s.deactive]: active === false})}>
       <div className={s.overlay} />
       <div className={s.menuItems}>
         <ul>
-          <li>
-            <a href="#welcome" onClick={() => onClickMenuItem('welcome')}>
-              HOME
-            </a>
-          </li>
-          <li>
-            <a href="#game" onClick={() => onClickMenuItem('game')}>
-              GAME
-            </a>
-          </li>
-          <li>
-            <a href="#about" onClick={() => onClickMenuItem('about')}>
-              ABOUT
-            </a>
-          </li>
-          <li>
-            <a href="#contact" onClick={() => onClickMenuItem('contact')}>
-              CONTACT
-            </a>
-          </li>
+          {
+            MENU.map(({title, to}, index) => (
+              <li key={index}>
+                <Link to={to} onClick={() => onClickMenuItem()}>
+                  {title}
+                </Link>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
@@ -36,7 +28,7 @@ const Menu = ({ active, onClickMenuItem }) => {
 };
 
 Menu.propTypes = {
-  active: bool.isRequired,
+  active: bool,
   onClickMenuItem: func.isRequired
 };
 

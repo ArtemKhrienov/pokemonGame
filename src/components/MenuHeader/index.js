@@ -1,31 +1,31 @@
 import { useState } from 'react';
-import { func } from 'prop-types';
+import { bool, array } from 'prop-types';
 
 import Menu from './Menu';
 import NavBar from './Navbar';
 
-const MenuHeader = ({ onClickMenuItem }) => {
-  const [isActive, setActive] = useState(false);
+const MenuHeader = ({ bgActive, homePaths }) => {
+  const [isActive, setActive] = useState(null);
 
-  const handleClickMenuItem = item => {
-    onClickMenuItem && onClickMenuItem(item);
-    setActive(!isActive);
+  const handleClickMenuItem = () => {
+    setActive(prevState => !prevState);
   };
 
   const handleCloseMenu = () => {
-    setActive(!isActive);
+    setActive(prevState => !prevState);
   };
 
   return(
     <>
       <Menu active={isActive} onClickMenuItem={handleClickMenuItem}/>
-      <NavBar active={isActive} onCloseMenu={handleCloseMenu} />
+      <NavBar active={isActive} bgActive={bgActive} homePaths={homePaths} onCloseMenu={handleCloseMenu} />
     </>
   );
 };
 
 MenuHeader.propTypes = {
-  onClickMenuItem: func.isRequired
+  homePaths: array.isRequired,
+  bgActive: bool
 };
 
 export default MenuHeader;

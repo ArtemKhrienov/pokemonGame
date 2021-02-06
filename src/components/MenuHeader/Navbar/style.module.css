@@ -23,7 +23,7 @@
 #navbar .brand {
   font-size: 1.6rem;
   color: #fafafa;
-  cursor: default;
+  cursor: pointer;
 }
 
 /***** Menu Button *****/
@@ -32,6 +32,7 @@
   height: 22px;
   width: 30px;
   outline: none;
+  cursor: pointer;
 }
 
 .menuButton span,
