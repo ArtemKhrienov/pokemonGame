@@ -4,14 +4,24 @@ import cn from 'classnames';
 import cardBackSideBg from './assets/card-back-side.jpg';
 import s from './style.module.css';
 
-const PokemonCard = ({ id, name, type, values, img, isActive, onCardClick }) => {
+const PokemonCard = ({
+                       id,
+                       name,
+                       type,
+                       values,
+                       img,
+                       isActive = true,
+                       isSelected,
+                       className,
+                       minimize,
+                       onCardClick }) => {
   const handleClick = () => {
-    onCardClick && onCardClick(id);
+    onCardClick && onCardClick(id, !isSelected);
   };
 
   return(
-    <div className={s.root} onClick={handleClick}>
-      <div className={cn(s.pokemonCard, {[s.active]: isActive})}>
+    <div className={((minimize) ? s.minimizedRoot : s.root)} onClick={handleClick}>
+      <div className={cn(className, s.pokemonCard, {[s.active]: isActive, [s.selected]: isSelected})}>
         <div className={s.cardFront}>
           <div className={cn(s.wrap, s.front)}>
             <div className={cn(s.pokemon, type)}>
@@ -24,11 +34,15 @@ const PokemonCard = ({ id, name, type, values, img, isActive, onCardClick }) => 
               <div className={s.imgContainer}>
                 <img src={img} alt={name} />
               </div>
-              <div className={s.info}>
+              { !minimize && (<div className={s.info}>
                 <span className={s.number}>#{id}</span>
-                <h3 className={s.name}>{name}</h3>
-                <small className={s.type}>Type: <span>{type}</span></small>
-              </div>
+                <h3 className={s.name}>
+                  {name}
+                </h3>
+                <small className={s.type}>
+                  Type: <span>{type}</span>
+                </small>
+              </div>) }
             </div>
           </div>
         </div>
@@ -48,8 +62,11 @@ PokemonCard.propTypes = {
   type: string.isRequired,
   values: object.isRequired,
   img: string.isRequired,
-  isActive: bool.isRequired,
-  onCardClick: func.isRequired
+  onCardClick: func.isRequired,
+  isActive: bool,
+  isSelected: bool,
+  className: string,
+  minimize: bool
 };
 
 export default PokemonCard;

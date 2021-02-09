@@ -1,7 +1,7 @@
 import { string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-import { Button } from '../UI';
+import { Button } from 'src/components/UI';
 import s from './style.module.css';
 
 const Header = ({ title, descr }) => {

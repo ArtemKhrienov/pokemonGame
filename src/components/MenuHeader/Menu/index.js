@@ -1,4 +1,4 @@
-import MENU from '../../../shared/data/menu.json';
+import MENU from 'src/shared/data/menu.json';
 
 import { bool, func } from 'prop-types';
 import { Link } from 'react-router-dom';

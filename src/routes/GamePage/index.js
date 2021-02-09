@@ -1,71 +1,40 @@
-import { useState, useEffect } from 'react';
-import database from '../../services/firebase';
-import cn from 'classnames';
+import { useState } from 'react';
+import {Switch, Route, useRouteMatch, Redirect} from 'react-router-dom';
 
-import { getPokemon } from '../../services/pokemon';
+import { PokemonContext } from 'src/context/pokemonContext';
 
-import PokemonCard from '../../components/PokemonCard';
-import { Button } from '../../components/UI';
-
-import s from './style.module.css';
+import StartPage from './routes/StartPage';
+import BoardPage from './routes/BoardPage';
+import FinishPage from './routes/FinishPage';
 
 const GamePage = () => {
-  const [pokemons, setPokemons] = useState({});
+  const match = useRouteMatch();
+  const [pokemons, setPokemons] = useState([]);
 
-  useEffect(() => {
-    database.ref('pokemons').once('value', (snapshot) => {
-      setPokemons(snapshot.val());
-    });
-  }, []);
-
-  const handleCardClick = id => {
-    setPokemons(prevState => {
-      return Object.entries(prevState).reduce((acc, item) => {
-        const pokemon = {...item[1]};
-        if (pokemon.id === id) {
-          pokemon.active = !pokemon.active;
-          database.ref(`pokemons/${item[0]}`).update(pokemon);
-        }
-        acc[item[0]] = pokemon;
-        return acc;
-      }, {});
-    });
+  const handlePokemonSelected = (pokemon) => {
+    setPokemons(prevState => [...prevState, pokemon]);
   };
 
-  const handleAddNewPokemon = () => {
-    const newKey = database.ref().child('pokemons').push().key;
-    const pokemonData = getPokemon();
-
-    database.ref(`pokemons/${newKey}`).set(pokemonData, (err) => {
-      if (!err) {
-        setPokemons(prevState => {
-          return { ...prevState, [newKey]: pokemonData };
-        });
-      }
+  const handlePokemonUnselected = pokemon => {
+    setPokemons(prevState => {
+      const idx = prevState.findIndex( item => item.id === pokemon.id);
+      return (idx !== -1) ? prevState.splice(idx, 1) : prevState;
     });
   };
 
   return(
-    <>
-      <div className={cn(s.buttonWrapper, 'flex')}>
-        <Button name="Add New Pokemon" primary onClick={handleAddNewPokemon} />
-      </div>
-      <div className="flex">
-        {
-          Object.entries(pokemons).map(([key, { id, name, type, values, img, active }]) =>
-            <PokemonCard
-              key={key}
-              id={id}
-              name={name}
-              type={type}
-              values={values}
-              img={img}
-              isActive={!!active}
-              onCardClick={handleCardClick}/>
-          )
-        }
-      </div>
-    </>
+    <PokemonContext.Provider value={{
+      pokemons,
+      onPokemonSelected: handlePokemonSelected,
+      onPokemonUnselected: handlePokemonUnselected
+    }}>
+      <Switch>
+        <Route path={`${match.path}/`} exact component={StartPage}/>
+        <Route path={`${match.path}/board`} component={BoardPage}/>
+        <Route path={`${match.path}/finish`} component={FinishPage}/>
+        <Route render={() => <Redirect to="/404" />} />
+      </Switch>
+    </PokemonContext.Provider>
   );
 };
 
