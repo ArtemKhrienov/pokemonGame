@@ -1,8 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import cn from 'classnames';
 
-import { getRandomPokemon } from 'src/services/pokemon';
 import { FirebaseContext } from 'src/context/firebaseContext';
 import { PokemonContext } from 'src/context/pokemonContext';
 
@@ -21,52 +19,54 @@ const StartPage = () => {
     firebase.getPokemonSoket(pokemons => {
       setPokemons(pokemons);
     });
+
+    return () => firebase.offPokemonSoket();
   }, [firebase]);
 
-  const handleCardClick = (id, isSelected) => {
-    const updatedState = Object.entries(pokemons).reduce((acc, item) => {
-      const pokemon = {...item[1]};
-      if (pokemon.id === id) {
-        pokemon.active = !pokemon.active;
-        (isSelected) ?
-          pokemonCtx.onPokemonSelected(pokemon) :
-          pokemonCtx.onPokemonUnselected(pokemon);
+  const handleChangeSelected = (key) => {
+    const pokemon = { ...pokemons[key] };
+    pokemonCtx.onSelectedPokemons(key, pokemon);
+    setPokemons(prevState => ({
+      ...prevState,
+      [key]: {
+        ...prevState[key],
+        selected: !prevState[key].selected,
       }
-      acc[item[0]] = pokemon;
-      firebase.updatePokemon(item[0], pokemon);
-      return acc;
-    }, {});
-    setPokemons(updatedState);
+    }));
   };
 
-  const handleAddNewPokemon = () => {
-    const pokemon = getRandomPokemon();
-    firebase.addPokemon(pokemon);
-  };
-
-  const handleStartGame = () => {
+  const handleStartGameClick = () => {
     history.push('/game/board');
   };
 
   return(
     <>
-      <div className={cn(s.buttonWrapper, 'flex')}>
-        <Button name="Add New Pokemon" primary onClick={handleAddNewPokemon} />
-        <Button name="Start Game" primary onClick={handleStartGame} />
+      <div className={s.buttonWrapper}>
+        <Button
+          name="Start Game"
+          primary
+          onClick={handleStartGameClick}
+          disabled={Object.keys(pokemonCtx.pokemons).length < 5}
+        />
       </div>
-      <div className="flex">
+      <div className={s.flex}>
         {
-          Object.entries(pokemons).map(([key, { id, name, type, values, img, active }]) =>
+          Object.entries(pokemons).map(([key, { id, name, type, values, img, selected }]) =>
             <PokemonCard
+              className={s.card}
               key={key}
               id={id}
               name={name}
               type={type}
               values={values}
               img={img}
-              isActive={active}
-              isSelected={(!(active === undefined || active === false))}
-              onCardClick={handleCardClick}/>
+              isActive={true}
+              isSelected={selected}
+              onCardClick={() => {
+                if (Object.keys(pokemonCtx.pokemons).length < 5 || selected) {
+                  handleChangeSelected(key)
+                }
+              }}/>
           )
         }
       </div>

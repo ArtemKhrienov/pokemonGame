@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import {Switch, Route, useRouteMatch, Redirect} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import {Switch, Route, useRouteMatch, Redirect, useHistory } from 'react-router-dom';
 
 import { PokemonContext } from 'src/context/pokemonContext';
 
@@ -9,24 +9,58 @@ import FinishPage from './routes/FinishPage';
 
 const GamePage = () => {
   const match = useRouteMatch();
-  const [pokemons, setPokemons] = useState([]);
+  const history = useHistory();
+  const [selectedPokemons, setSelectedPokemons] = useState({});
+  const [gameResult, setGameResult] = useState(null);
+  const [cardsInGame, setCardsInGame] = useState({ player1Cards: [], player2Cards: []});
 
-  const handlePokemonSelected = (pokemon) => {
-    setPokemons(prevState => [...prevState, pokemon]);
+  useEffect(() => {
+    const unlisten = history.listen(({ pathname }) => {
+      if (pathname === '/game') {
+        setSelectedPokemons({});
+        setGameResult(null);
+        setCardsInGame({ player1Cards: [], player2Cards: []});
+      }
+    });
+
+    return () => {
+      unlisten();
+    }
+  }, []);
+
+  const handleSelectedPokemons = (key, pokemon) => {
+    setSelectedPokemons(prevState => {
+      if (prevState[key]) {
+        const copyState = {...prevState};
+        delete copyState[key];
+
+        return copyState;
+      }
+
+      return {
+        ...prevState,
+        [key]: pokemon,
+      }
+    });
   };
 
-  const handlePokemonUnselected = pokemon => {
-    setPokemons(prevState => {
-      const idx = prevState.findIndex( item => item.id === pokemon.id);
-      return (idx !== -1) ? prevState.splice(idx, 1) : prevState;
-    });
+  const handlePlayersCardsFetched = (player1Cards, player2Cards) => {
+    setCardsInGame({ player1Cards: player1Cards, player2Cards: player2Cards });
+  };
+
+  const handleGameFinished = (result) => {
+    setGameResult(result);
+    history.push('/game/finish');
   };
 
   return(
     <PokemonContext.Provider value={{
-      pokemons,
-      onPokemonSelected: handlePokemonSelected,
-      onPokemonUnselected: handlePokemonUnselected
+      pokemons: selectedPokemons,
+      cardsInGame,
+      gameResult,
+      onSelectedPokemons: handleSelectedPokemons,
+      onPlayersCardsFetched: handlePlayersCardsFetched,
+      onGameFinished: handleGameFinished
     }}>
       <Switch>
         <Route path={`${match.path}/`} exact component={StartPage}/>
