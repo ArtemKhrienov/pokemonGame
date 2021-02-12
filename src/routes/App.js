@@ -22,7 +22,7 @@ const App = () => {
   const { pathname } = useLocation();
 
   const isHomePage = () => HOME_PATHS.includes(pathname);
-  const isBgNotActive = () => BG_NOT_ACTIVE_PATHS.includes(pathname);
+  const isPadding = () => BG_NOT_ACTIVE_PATHS.includes(pathname);
 
   return(
     <FirebaseContext.Provider value={new Firebase()}>
@@ -30,8 +30,8 @@ const App = () => {
         <Route path="/404" component={NotFound} />
         <Route>
           <>
-            <MenuHeader bgActive={!isBgNotActive()} homePaths={HOME_PATHS} />
-            <div className={cn(s.wrap, { [s.isHomePage]: isHomePage() || isBgNotActive() })}>
+            <MenuHeader bgActive={!isPadding()} homePaths={HOME_PATHS} />
+            <div className={cn(s.wrap, { [s.isHomePage]: isHomePage() || isPadding() })}>
               <Switch>
                 <Route path={HOME_PATHS} exact component={HomePage} />
                 <Route path="/about" component={AboutPage} />

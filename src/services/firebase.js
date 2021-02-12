@@ -27,6 +27,10 @@ class Firebase {
     });
   };
 
+  offPokemonSoket = () => {
+    this.database.ref('pokemons').off();
+  };
+
   addPokemon = (pokemon, cb) => {
     const key = this.database.ref().child('pokemons').push().key;
     this.database.ref(`pokemons/${key}`).set(pokemon);

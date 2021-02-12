@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import s from './style.module.css';
 
-const Button = ({ name, primary, submitting,  ...props }) => {
+const Button = ({ name, primary, disabled,  ...props }) => {
   const btnClass = cn(
     s.btn,
     {
@@ -13,7 +13,7 @@ const Button = ({ name, primary, submitting,  ...props }) => {
 
   return(
     <>
-      <button className={btnClass} disabled={submitting} {...props}>
+      <button className={btnClass} disabled={disabled} {...props}>
         { name }
       </button>
     </>
@@ -23,7 +23,7 @@ const Button = ({ name, primary, submitting,  ...props }) => {
 Button.propTypes = {
   name: string.isRequired,
   primary: bool,
-  submitting: bool
+  disabled: bool
 };
 
 export default Button;

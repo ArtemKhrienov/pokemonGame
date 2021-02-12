@@ -5,13 +5,6 @@
   perspective: 1000px;
 }
 
-.minimizedRoot {
-  width: 268px;
-  height: 25%;
-  margin-top: -40px;
-  perspective: 1000px;
-}
-
 .pokemonCard {
   --fire: #FDDFDF;
   --grass: #DEFDE0;
@@ -34,7 +27,6 @@
   transform-style: preserve-3d;
   transition: .6s .1s;
   transform: rotateY(180deg);
-  cursor: pointer;
 }
 
 .pokemonCard.active {
@@ -42,7 +34,8 @@
 }
 
 .pokemonCard.selected {
-  margin-top: -40px;
+  margin-top: -20px;
+  margin-bottom: 20px;
 }
 
 .cardFront,
@@ -64,6 +57,11 @@
 .cardFront {
   transform: rotateY(0deg);
   z-index: 2;
+}
+
+.pokemonCard:active .wrap.front::after,
+.pokemonCard:focus .wrap.front::after {
+  border-color: var(--rock);
 }
 
 .wrap {
@@ -164,6 +162,14 @@
 }
 .normal {
   background-color: var(--normal);
+}
+
+.red {
+  background-color: #d998b2;
+}
+
+.blue {
+  background-color: #a8caea;
 }
 
 .pokemon .imgContainer {

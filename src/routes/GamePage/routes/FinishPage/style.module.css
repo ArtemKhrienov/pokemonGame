@@ -1,6 +1,15 @@
-.container {
+.flex {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-gap: 20px;
+}
+
+.buttonWrapper {
+  text-align: center;
+  padding: 2rem;
+}
+
+.card {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 380px;
 }
